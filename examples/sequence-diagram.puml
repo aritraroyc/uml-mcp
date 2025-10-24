@@ -1,0 +1,33 @@
+@startuml
+title Authentication Sequence Diagram
+
+actor User
+participant "Web Application" as Web
+participant "Auth Service" as Auth
+database "User Database" as DB
+
+User -> Web: Enter credentials
+activate Web
+
+Web -> Auth: POST /auth/login
+activate Auth
+
+Auth -> DB: Query user
+activate DB
+DB --> Auth: User data
+deactivate DB
+
+Auth -> Auth: Validate password
+
+alt Successful authentication
+    Auth --> Web: JWT token
+    Web --> User: Login success
+else Authentication failure
+    Auth --> Web: Error 401
+    Web --> User: Invalid credentials
+end
+
+deactivate Auth
+deactivate Web
+
+@enduml

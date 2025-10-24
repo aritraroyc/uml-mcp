@@ -1,0 +1,88 @@
+@startuml
+title E-Commerce System Class Diagram
+
+package "User Management" {
+    class User {
+        -Long id
+        -String username
+        -String email
+        -String password
+        -Date createdAt
+        +login()
+        +logout()
+        +updateProfile()
+    }
+
+    class Customer {
+        -String address
+        -String phone
+        -List<Order> orders
+        +placeOrder()
+        +viewOrders()
+    }
+
+    class Admin {
+        -List<Permission> permissions
+        +manageUsers()
+        +viewReports()
+        +manageProducts()
+    }
+
+    User <|-- Customer
+    User <|-- Admin
+}
+
+package "Product Management" {
+    class Product {
+        -Long id
+        -String name
+        -String description
+        -BigDecimal price
+        -Integer stock
+        +updateStock()
+        +setPrice()
+    }
+
+    class Category {
+        -Long id
+        -String name
+        -List<Product> products
+        +addProduct()
+        +removeProduct()
+    }
+
+    Category "1" *-- "many" Product
+}
+
+package "Order Management" {
+    class Order {
+        -Long id
+        -Date orderDate
+        -OrderStatus status
+        -BigDecimal totalAmount
+        +calculateTotal()
+        +updateStatus()
+    }
+
+    class OrderItem {
+        -Integer quantity
+        -BigDecimal price
+        +getSubtotal()
+    }
+
+    enum OrderStatus {
+        PENDING
+        PROCESSING
+        SHIPPED
+        DELIVERED
+        CANCELLED
+    }
+
+    Order "1" *-- "many" OrderItem
+    Order --> OrderStatus
+}
+
+Customer "1" -- "many" Order
+OrderItem "many" -- "1" Product
+
+@enduml

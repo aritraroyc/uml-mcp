@@ -1,0 +1,58 @@
+@startuml
+title Order Processing Activity Diagram
+
+start
+
+:Receive Order;
+
+:Validate Order Details;
+
+if (Order Valid?) then (yes)
+  :Check Inventory;
+
+  if (Items in Stock?) then (yes)
+    :Reserve Items;
+    :Process Payment;
+
+    if (Payment Successful?) then (yes)
+      fork
+        :Update Inventory;
+      fork again
+        :Generate Invoice;
+      fork again
+        :Send Order Confirmation Email;
+      end fork
+
+      :Prepare Shipment;
+      :Ship Order;
+      :Update Order Status to Shipped;
+      :Send Tracking Information;
+
+      :Wait for Delivery;
+      :Mark as Delivered;
+      :Send Delivery Confirmation;
+
+    else (no)
+      :Release Reserved Items;
+      :Send Payment Failed Notification;
+      :Cancel Order;
+    endif
+
+  else (no)
+    :Send Out of Stock Notification;
+    if (Back Order Allowed?) then (yes)
+      :Create Back Order;
+      :Notify Customer;
+    else (no)
+      :Cancel Order;
+    endif
+  endif
+
+else (no)
+  :Send Validation Error;
+  :Reject Order;
+endif
+
+stop
+
+@enduml

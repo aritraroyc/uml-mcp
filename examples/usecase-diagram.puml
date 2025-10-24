@@ -1,0 +1,49 @@
+@startuml
+title Online Shopping System Use Cases
+
+left to right direction
+
+actor Customer
+actor "Guest User" as Guest
+actor "Admin" as Admin
+actor "Payment Gateway" as Payment
+
+rectangle "Online Shopping System" {
+    usecase "Browse Products" as UC1
+    usecase "Search Products" as UC2
+    usecase "View Product Details" as UC3
+    usecase "Add to Cart" as UC4
+    usecase "Checkout" as UC5
+    usecase "Make Payment" as UC6
+    usecase "Register Account" as UC7
+    usecase "Login" as UC8
+    usecase "Track Order" as UC9
+    usecase "Manage Products" as UC10
+    usecase "Manage Users" as UC11
+    usecase "View Reports" as UC12
+    usecase "Process Refund" as UC13
+}
+
+Guest --> UC1
+Guest --> UC2
+Guest --> UC3
+Guest --> UC7
+
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC4
+Customer --> UC5
+Customer --> UC8
+Customer --> UC9
+
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+
+UC5 .> UC6 : includes
+UC5 .> UC8 : includes
+UC6 --> Payment
+
+@enduml
